@@ -1,0 +1,112 @@
+#include <LiquidCrystal.h> //Load Liquid Crystal Library
+LiquidCrystal LCD(11,10,9,2,3,4,5);  //Create Liquid Crystal Object called LCD
+
+#define trigPin 13 //Sensor Echo pin connected to Arduino pin 13
+#define echoPin 12 //Sensor Trip pin connected to Arduino pin 12
+const int LED1 = A0;
+const int LED2 = A1;
+const int LED3 = A2;
+const int LED4 = A3;
+const int LED5 = A4;
+const int LED6 = A5;
+
+int duration = 0;
+int distance = 0;
+
+void setup() 
+{  
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(LED1 , OUTPUT);
+  pinMode(LED2 , OUTPUT);
+  pinMode(LED3 , OUTPUT);
+  pinMode(LED4 , OUTPUT);
+  pinMode(LED5 , OUTPUT);
+  pinMode(LED6 , OUTPUT);
+ 
+  
+  Serial.begin(9600);
+  
+  LCD.begin(16,2); //Tell Arduino to start your 16 column 2 row LCD
+  LCD.setCursor(0,0);  //Set LCD cursor to upper left corner, column 0, row 0
+  LCD.print("Distance between vehicles:");  //Print Message on First Row
+}
+
+void loop() {
+  long duration1, distance1;
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration1 = pulseIn(echoPin, HIGH);
+  distance1 = (duration1/2) / 29.1;
+  
+  
+
+  LCD.setCursor(0,1);  //Set cursor to first column of second row
+  LCD.print("                "); //Print blanks to clear the row
+  LCD.setCursor(0,1);   //Set Cursor again to first column of second row
+  LCD.print(distance1); //Print measured distance
+  LCD.print(" cm");  //Print your units.
+  delay(250); //pause to let things settle
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);  
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration/58.2;
+
+  if ( distance <= 5 )
+  {
+    digitalWrite(LED1, HIGH);
+    
+  }
+  else
+  {
+    digitalWrite(LED1, LOW);
+   
+  }
+  if ( distance <= 10 )
+  {
+    digitalWrite(LED2, HIGH);
+  }
+  else
+  {
+    digitalWrite(LED2, LOW);
+  }
+  if ( distance <= 15 )
+  {
+    digitalWrite(LED3, HIGH);
+  }
+  else
+  {
+    digitalWrite(LED3, LOW);
+  }
+  if ( distance <= 20 )
+  {
+    digitalWrite(LED4, HIGH);
+  }
+  else
+  {
+    digitalWrite(LED4, LOW);
+  }
+  if ( distance <= 25 )
+  {
+    digitalWrite(LED5, HIGH);
+  }
+  else
+  {
+    digitalWrite(LED5, LOW);
+  }
+  if ( distance <= 30 )
+  {
+    digitalWrite(LED6, HIGH);
+  }
+  else
+  {
+    digitalWrite(LED6, LOW);
+  }
+  delay(100);
+}
